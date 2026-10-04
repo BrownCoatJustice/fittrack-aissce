@@ -1,0 +1,5 @@
+{% extends "layout.html" %}{% block content %}
+<div class="page-head"><div><p class="eyebrow">CLASS COMPETITION</p><h1>Leaderboard</h1><p class="muted">Keep moving and climb the rankings.</p></div></div>
+<section class="panel">{% for r in board %}<div class="rank"><div class="rank-num">{{loop.index}}</div><div class="rank-name">{{r.name}}</div><div class="rank-score">{{r.score|int}} <small>pts</small></div></div>
+{% else %}<p class="empty">No students have logged activity yet.</p>{% endfor %}</section>
+{% endblock %}

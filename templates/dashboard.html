@@ -1,0 +1,32 @@
+{% extends "layout.html" %}{% block content %}
+<div class="page-head"><div><p class="eyebrow">OVERVIEW</p><h1>Good to see you, {{name}}.</h1><p class="muted">Your fitness activity at a glance.</p></div>
+<div class="score"><small>FITNESS SCORE</small><strong>{{points}}</strong><span>pts</span></div></div>
+<div class="stats-grid">
+<div class="stat"><div class="stat-icon">↗</div><small>STEPS</small><strong>{{stats.steps}}</strong><span>total logged</span></div>
+<div class="stat"><div class="stat-icon">◷</div><small>WORKOUT</small><strong>{{stats.workout}}<i> min</i></strong><span>total logged</span></div>
+<div class="stat"><div class="stat-icon">◇</div><small>WATER</small><strong>{{stats.water}}<i> glasses</i></strong><span>total logged</span></div>
+<div class="stat"><div class="stat-icon">☾</div><small>SLEEP</small><strong>{{"%.1f"|format(stats.sleep)}}<i> hrs</i></strong><span>average</span></div></div>
+<div class="two-col"><section class="panel"><div class="panel-head"><div><h2>Activity trend</h2><p class="muted">Steps and workout minutes over time.</p></div></div><div class="chart-wrap"><canvas id="activityChart"></canvas></div></section>
+<section class="panel"><div class="panel-head"><div><h2>Add today's activity</h2><p class="muted">Keep your record up to date.</p></div></div>
+<form method="post" class="activity-form">
+<div><label>Steps</label><input type="number" name="steps" min="0" placeholder="8000"></div>
+<div><label>Workout minutes</label><input type="number" name="workout" min="0" placeholder="45"></div>
+<div><label>Water glasses</label><input type="number" name="water" min="0" placeholder="8"></div>
+<div><label>Sleep hours</label><input type="number" name="sleep" min="0" step=".5" placeholder="8"></div>
+<button class="primary">Save activity</button></form></section></div>
+<section class="panel"><div class="panel-head"><div><h2>Recent activity</h2><p class="muted">Your last 10 entries.</p></div></div>
+<div class="table-scroll"><table><thead><tr><th>DATE</th><th>STEPS</th><th>WORKOUT</th><th>WATER</th><th>SLEEP</th></tr></thead><tbody>
+{% for r in logs %}<tr><td>{{r.log_date}}</td><td>{{r.steps}}</td><td>{{r.workout}} min</td><td>{{r.water}}</td><td>{{r.sleep}} hrs</td></tr>
+{% else %}<tr><td colspan="5" class="empty">No activity logged yet.</td></tr>{% endfor %}
+</tbody></table></div></section>
+<script>
+const labels={{chart_rows|map(attribute="log_date")|list|tojson}};
+const steps={{chart_rows|map(attribute="steps")|list|tojson}};
+const workouts={{chart_rows|map(attribute="workout")|list|tojson}};
+new Chart(document.getElementById("activityChart"),{type:"line",data:{labels:labels,datasets:[
+{label:"Steps",data:steps,borderWidth:3,tension:.35,yAxisID:"y"},
+{label:"Workout minutes",data:workouts,borderWidth:3,tension:.35,yAxisID:"y1"}]},
+options:{responsive:true,maintainAspectRatio:false,interaction:{mode:"index",intersect:false},
+scales:{y:{beginAtZero:true,grid:{color:"rgba(255,255,255,.07)"}},y1:{beginAtZero:true,position:"right",grid:{drawOnChartArea:false}},x:{grid:{display:false}}},
+plugins:{legend:{labels:{usePointStyle:true}}}}});
+</script>{% endblock %}
