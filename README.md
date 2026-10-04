@@ -15,4 +15,4 @@ Python, Flask, SQLite, SQL, HTML, CSS, JavaScript, Jinja2, and Chart.js.
 cd fittrack-aissce
 python3 app.py
 ```
-Then click on the link displayed on the terminal.
+Then click on the link displayed in the terminal.
